@@ -4,9 +4,16 @@ import {Switch} from '../switch'
 
 // 🐨 create your React context here with React.createContext
 
+const ToggleContext = React.createContext();
+
 class Toggle extends React.Component {
   // 🐨 expose the ToggleContext.Consumer as a static property of Toggle here.
-  state = {on: false}
+  state = {
+    on: false
+  }
+
+  static Consumer = ToggleContext.Consumer
+
   toggle = () =>
     this.setState(
       ({on}) => ({on: !on}),
@@ -14,10 +21,8 @@ class Toggle extends React.Component {
     )
   render() {
     // 🐨 replace this with rendering the ToggleContext.Provider
-    return this.props.children({
-      on: this.state.on,
-      toggle: this.toggle,
-    })
+    return(<ToggleContext.Provider value={{on: this.state.on, toggle: this.toggle}} {...this.props}> {this.props.children}</ToggleContext.Provider>)
+
   }
 }
 

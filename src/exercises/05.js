@@ -13,7 +13,7 @@ class Toggle extends React.Component {
   getStateAndHelpers() {
     return {
       on: this.state.on,
-      toggle: this.toggle,
+      toggle: this.onToggle,
       // In our last usage example, you'll notice that we had some
       // common props (`onClick`, and we're also missing `aria-pressed`
       // value on the `button`). Because most users will want these
@@ -23,6 +23,7 @@ class Toggle extends React.Component {
       // 🐨 Add a `togglerProps` object that has an `aria-pressed` (should
       // be set to the value of the `on` state), and an `onClick` assigned
       // to the toggle function.
+      togglerProps: { "aria-pressed": this.state.on, onClick: this.toggle }
     }
   }
   render() {
@@ -35,6 +36,7 @@ class Toggle extends React.Component {
 // You can make all the tests pass by updating the Toggle component.
 function Usage({
   onToggle = (...args) => console.log('onToggle', ...args),
+  onButtonClick = () => console.log('sup yo'),
 }) {
   return (
     <Toggle onToggle={onToggle}>
@@ -42,7 +44,13 @@ function Usage({
         <div>
           <Switch on={on} {...togglerProps} />
           <hr />
-          <button aria-label="custom-button" {...togglerProps}>
+          <button aria-label="custom-button"
+            {...togglerProps}
+            onClick={(...args) => {
+              togglerProps.onClick(...args);
+              onButtonClick();
+            }
+          }>
             {on ? 'on' : 'off'}
           </button>
         </div>
